@@ -14,7 +14,7 @@ char *socket_path = (char *)"\0hidden";
 int main(int argc, char** argv) {
   struct sockaddr_un addr;
   char buf[100];
-  int fd,rc;
+  int fd;
 
 	int sflag = 0;
 	int opt;
@@ -36,9 +36,15 @@ int main(int argc, char** argv) {
 		string cmd = "";
 	
 	while (cmd != "quit") {
+	
 		cout << ">";
 		cin >> cmd;
-		if (cmd == "connect") {
+		if (cmd == "quit") {
+			write(fd, cmd.c_str(), sizeof(cmd));
+			cout << "quiting" << endl;
+			break;
+			}
+		else if (cmd == "connect") {
 			if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
 				cout << "socket error" << endl;
 				continue;
@@ -63,22 +69,21 @@ int main(int argc, char** argv) {
 			continue;
 		}
 		
-		if (cmd == "disconnect") {
+		else if (cmd == "disconnect") {
 			if (fd > 0) {
 				close(fd);
 				cout << "disconnection success" << endl;
 				}
 			continue;
 			}
-		
-		if (strncmp(cmd.c_str(), "insert", 6)==0 || strncmp(cmd.c_str(), "get", 3)==0) {
-			
-				write(fd, cmd.c_str(), 10000);
-				
+		else if ((strncmp(cmd.c_str(), "insert", 6)==0 && strlen(cmd.c_str()) > 6) || (strncmp(cmd.c_str(), "get", 3)==0 && strlen(cmd.c_str()) > 3)|| (strncmp(cmd.c_str(), "peek", 4)==0 && strlen(cmd.c_str()) > 4)|| (strncmp(cmd.c_str(), "update", 6)==0 && strlen(cmd.c_str()) > 6) || (strncmp(cmd.c_str(), "delete", 6)==0 && strlen(cmd.c_str()) > 6)) {
+				write(fd, cmd.c_str(), sizeof(cmd));
 				continue;
 			}
 
-	
+		else {
+				cout << "invalid input" << endl;
+			}
 	continue;
 	}
 	return 0;	
