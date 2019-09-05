@@ -12,6 +12,7 @@ using namespace std;
 
 // Almacenamiento KV
 KVStore db;
+
 char* socket_path = (char *)"\0hidden";
 
 int main(int argc, char** argv) {	
@@ -20,6 +21,7 @@ int main(int argc, char** argv) {
 	int fd,cl,rc;
 	int sflag = 0;
 	int opt;
+	int ex = 0;
 
 	// Procesar opciones de linea de comando
     while ((opt = getopt (argc, argv, "s:")) != -1) {
@@ -35,7 +37,7 @@ int main(int argc, char** argv) {
 				return 0;
           }	    	
     }
-
+	while (1) {
   if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
     cout <<"socket error" <<endl;
     exit(-1);
@@ -74,6 +76,11 @@ int main(int argc, char** argv) {
 		}
 
     while ( (rc=read(cl,buf,sizeof(buf))) > 0) { 
+ 			if (strncmp(buf, "quit", 4)==0 && strlen(buf) == 4) {
+			cout << "quiting..." << endl;
+			ex = 1;
+			break;
+				}
       printf("%.*s\n", rc, buf);
       string copy(buf);
       //Identifica los valores a y b de insert(a,b)
@@ -85,15 +92,15 @@ int main(int argc, char** argv) {
 					int posUltimoParentesis = parentesis.find(')');
 					string primerNumero = parentesis.substr(1,posComa-1);
 					string segundoNumero = parentesis.substr(posComa+1, (posUltimoParentesis-posComa-1));
-					cout << primerNumero << endl;
-					cout << segundoNumero << endl;
+					cout << "key: "+primerNumero << endl;
+					cout << "value: "+segundoNumero << endl;
 					*buf = '\0';
 				}
 				else 
 				{
 					int ultParentesis = parentesis.find(')');
 					string primerNumero = parentesis.substr(1,ultParentesis-1);
-					cout << primerNumero << endl;
+					cout << "value: "+primerNumero << endl;
 					*buf = '\0';
 			}
 			}
@@ -102,7 +109,39 @@ int main(int argc, char** argv) {
 				string parentesis = copy.substr(3);
 				int ultParentesis = parentesis.find(')');
 				string primerNumero = parentesis.substr(1,ultParentesis-1);
-				cout << primerNumero << endl;
+				cout << "key: " +primerNumero << endl;
+				*buf = '\0';
+				}
+			//Identifica el valor a de peek(a)
+			else if (strncmp(buf, "peek", 4)==0) {
+				string parentesis = copy.substr(4);
+				int ultParentesis = parentesis.find(')');
+				string primerNumero = parentesis.substr(1,ultParentesis-1);
+				cout << "key: "+primerNumero << endl;
+				*buf = '\0';
+				}
+			//Identifica el valor a y b de update(a,b)
+			else if (strncmp(buf, "update", 6)==0) {
+				string parentesis = copy.substr(6);	
+				int posComa = parentesis.find(',');
+				int posUltimoParentesis = parentesis.find(')');
+				string primerNumero = parentesis.substr(1,posComa-1);
+				string segundoNumero = parentesis.substr(posComa+1, (posUltimoParentesis-posComa-1));
+				cout << "key: "+primerNumero << endl;
+				cout << "value: "+segundoNumero << endl;
+				*buf = '\0';
+				}
+			//Identifica el valor a de delete(a)
+			else if (strncmp(buf, "delete", 6)==0) {
+				string parentesis = copy.substr(6);
+				int ultParentesis = parentesis.find(')');
+				string primerNumero = parentesis.substr(1,ultParentesis-1);
+				cout << "key: "+primerNumero << endl;
+				*buf = '\0';
+				}
+			//Retorna list de keys
+			else if (strncmp(buf, "list", 4)==0) {
+				cout << "lista: " << endl;
 				*buf = '\0';
 				}
 			}
@@ -114,6 +153,8 @@ int main(int argc, char** argv) {
       cout << "EOF\n" << endl;
       close(cl);
     }
+    if (ex == 1) break;
+  }
   }
 	
 	// Uso elemental del almacenamiento KV:
