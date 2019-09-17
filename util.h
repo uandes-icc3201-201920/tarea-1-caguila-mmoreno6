@@ -8,7 +8,7 @@ typedef unsigned char byte;
 // Esta estructura guarda el valor en la estructura K-V
 typedef struct {
 	size_t size;
-	vector<byte> data;
+	string data;
 } Value;
 
 // Definicion de la estructura K-V utilizada
