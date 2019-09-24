@@ -78,6 +78,9 @@ int main(int argc, char** argv) {
 			}
 		else if ((strncmp(cmd.c_str(), "insert", 6)==0 && strlen(cmd.c_str()) > 6) || (strncmp(cmd.c_str(), "get", 3)==0 && strlen(cmd.c_str()) > 3)|| (strncmp(cmd.c_str(), "peek", 4)==0 && strlen(cmd.c_str()) > 4)|| (strncmp(cmd.c_str(), "update", 6)==0 && strlen(cmd.c_str()) > 6) || (strncmp(cmd.c_str(), "delete", 6)==0 && strlen(cmd.c_str()) > 6)) {
 				write(fd, cmd.c_str(), sizeof(cmd));
+				char tempbuff[1024] = {0};
+				read(fd, tempbuff, 1024);
+				cout<<tempbuff<<endl;
 				continue;
 			}
 
