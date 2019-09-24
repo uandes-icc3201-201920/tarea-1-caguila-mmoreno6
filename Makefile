@@ -1,17 +1,10 @@
-CFLAGS = -g
-ASCIIDOC=/usr/bin/asciidoc
-DOC = Unix_domain_sockets.html
-PROGS = client server
+CC=g++
+flags=-Wall
 
-all: $(PROGS) $(DOC)
-
-srv: server.cpp
-cli: client.cpp
-
-Unix_domain_sockets.html: Unix_domain_sockets.txt
-	if [ -x $(ASCIIDOC) ]; then $(ASCIIDOC) $<; fi
-
-.PHONY: clean
+Compliador: client.cpp server.cpp
+	$(CC) $(flags) -o cliente client.cpp
+	$(CC) $(flags) -o server server.cpp -lpthread
 
 clean:
-	rm -f *.o socket $(PROGS)
+	rm -f cliente
+	rm -f server
