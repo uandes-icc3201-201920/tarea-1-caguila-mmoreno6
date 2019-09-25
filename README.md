@@ -1,1 +1,44 @@
-﻿                                  Informe tarea 1                                        Parte 1                                   1. Carlos Aguila                                   2. Martin Moreno*Introducción*        En el siguente informe veremos los puntos mas relevantes de la tarea que acabamos de realizar.La idea principal de esta tearea es la _**comunicación de procesos**_, en donde encontramos que la herramientas mas adecuada para llevar a cabo esta tarea es la probeida por unix, los _**unix domain socket**_ , con esta herramienta comunicamos los procesos; 1. cliente2. servidorEstos procesos describen a escala lo que pasa con una base de datos real, osea, las redes de comunicación y los procesos en si.En este sistema vemos que el proceso cliente es el proceso con interfaz de usuario, por lo que el usuario realiza recuests a través del proceso cliente. También vemos el proceso servidor, este es el proceso que esta constantemente escuchando al otro proceso, el servidor tiene los datos que serán solicitados por el proceso cliente. en resumen es una especie de comprador-vendedor.*Dificultades*          Después de discutir sobre el código llegamos al acuerdo de que las dificultades principales fueron 2       1. manejar la base de datos       2. comunicar procesos**manejar la base de datos** fue un desafio ya que manejar arreglos en C no es tan intuitivo dado a las discrepancias entre los tipos de datos.**comunicar procesos** resulto ser un desafio mas grande de lo que esperábamos porque encontramos cierta aleatoriedad en el resultado de la comunicación ,"*a veces si, a veces no*" *Funciones no realizadas* *Problemas conocidos*                       La interfaz de usuario siempre presenta un problema dado a que no siempre será un happy path el input que recibirá el programa, por lo que el programa debe ser resistente a todos los inputs. Es ahí donde encontramos nuestros errores, en los inputs.*Conclucion*              En la presente tarea aprendimos a comunicar procesos, una herramienta que de seguro nos será útil en futuras asignaturas y demases. Pero no solo aprendimos a comunicar procesos sino que también aprendimos las utilidades de separar procesos y entregar un sentido de paralelismo
+# Informe tarea 1.2
+
+1. Carlos Aguila
+2. Martin Moreno
+
+
+
+### *Introducción* 
+
+En el siguente informe veremos los puntos mas relevantes de la tarea que acabamos de realizar.
+La idea principal de esta tarea es la _**concurrencia para nuestra base de datos no relacional**_, usando _**unix domain socket**_ , como medio de comunicación entre los distintos procesos.
+
+1. cliente(s)
+2. servidor
+
+
+
+### *Dificultades*
+    
+Después de discutir sobre el código llegamos al acuerdo de que las dificultades principales fueron 2
+ 1. concurrencia de procesos
+ 2. contador global compartido
+
+**concurrencia de procesos** al ser primera vez que programabamos un servidor con acceso a multiples clientes al mismo tiempo, tuvimos que hacer un estudio profundo de esto en internet antes de empezar nuestra tarea.
+
+**contador globar compartido** fue un desafio ya que al ser una variable compartida por distintos threads, se podían generar ciertos problemas que fueron arreglados.
+
+
+
+ ### *Funciones no realizadas*
+
+Manejo de errores de algunos tipos inputs
+
+
+
+ ### *Problemas conocidos*
+          
+Algunos tipos de inputs mal ingresados pueden generar problemas con el programa.
+Por ejemplo: 
+```
+insert(45,
+update(dfg
+get(344,6)
+```
